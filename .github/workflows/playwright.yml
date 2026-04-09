@@ -26,6 +26,8 @@ jobs:
       run: npm run typecheck
     - name: Run public smoke tests
       run: npm run test:smoke
+    - name: Run public read tests
+      run: npm run test:read
     - name: Run auth tests
       if: env.HAS_AUTH_SECRETS == 'true'
       run: npm run test:auth

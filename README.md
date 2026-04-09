@@ -283,9 +283,10 @@ Behavior in CI:
 
 1. `npm run typecheck` runs on every workflow run
 2. `npm run test:smoke` runs on every workflow run
-3. `npm run test:auth` runs only if both secrets are present
-4. `npm run test:crud` runs only if both secrets are present
-5. `npm run test:negative` runs only if both secrets are present
+3. `npm run test:read` runs on every workflow run
+4. `npm run test:auth` runs only if both secrets are present
+5. `npm run test:crud` runs only if both secrets are present
+6. `npm run test:negative` runs only if both secrets are present
 
 ## Step 9. Install the Playwright VS Code Extension
 
@@ -322,6 +323,12 @@ Run the smoke test for `GET /mythology`:
 
 ```bash
 npm run test:smoke
+```
+
+Run public read tests for list, filters, sorting, and `GET /mythology/{id}`:
+
+```bash
+npm run test:read
 ```
 
 Run auth tests for `POST /register` and `POST /login`:
@@ -433,7 +440,7 @@ What each part is for:
 
 ## Step 13. API Smoke Test Starter
 
-The project includes a smoke test at `tests/api/mythology.spec.ts`.
+The project includes a smoke test in `tests/api/mythology-read.spec.ts`.
 
 What it does:
 
@@ -447,7 +454,19 @@ Why it works this way:
 2. It is a better real smoke test for this API than a placeholder endpoint
 3. `USERNAME` and `PASSWORD` stay in `.env` for the future `/register` and JWT flow
 
-## Step 14. Auth Test Starter
+## Step 14. Read Test Starter
+
+The project includes read tests at `tests/api/mythology-read.spec.ts`.
+
+What they cover:
+
+1. `GET /mythology` returns a non-empty array
+2. `GET /mythology?category=...` returns entities only from that category
+3. `GET /mythology?sort=asc|desc` returns correctly sorted names
+4. `GET /mythology/{id}` returns an existing entity
+5. `GET /mythology/{id}` returns `404` for a non-existent entity
+
+## Step 15. Auth Test Starter
 
 The project also includes auth tests at `tests/api/auth.spec.ts`.
 
@@ -457,7 +476,7 @@ What they cover:
 2. `POST /login` returns a JWT token for that user
 3. The username is generated uniquely from the env prefix on every run to avoid duplicate-registration failures
 
-## Step 15. Mythology CRUD Test Starter
+## Step 16. Mythology CRUD Test Starter
 
 The project also includes CRUD tests at `tests/api/mythology-crud.spec.ts`.
 
@@ -475,7 +494,7 @@ These tests:
 3. Work only with newly created entities, not system records
 4. Clean up created data after the test when needed
 
-## Step 16. Mythology Negative Test Starter
+## Step 17. Mythology Negative Test Starter
 
 The project also includes negative tests at `tests/api/mythology-negative.spec.ts`.
 

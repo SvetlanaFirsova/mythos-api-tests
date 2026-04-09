@@ -1,6 +1,8 @@
 import type { APIRequestContext, APIResponse } from '@playwright/test';
 
 export type MythologyCategory = 'gods' | 'heroes' | 'creatures';
+export type MythologyListCategory = MythologyCategory | 'all';
+export type MythologySortDirection = 'asc' | 'desc';
 
 export type MythologyEntity = {
   id: number;
@@ -17,6 +19,17 @@ export type PatchMythologyPayload = Partial<CreateMythologyPayload>;
 const createAuthHeaders = (token: string): Record<string, string> => ({
   Authorization: `Bearer ${token}`,
 });
+
+export const getMythologyList = (
+  request: APIRequestContext,
+  query?: {
+    category?: MythologyListCategory;
+    sort?: MythologySortDirection;
+  },
+): Promise<APIResponse> =>
+  request.get('mythology', {
+    params: query,
+  });
 
 export const getMythologyById = (
   request: APIRequestContext,

@@ -2,6 +2,7 @@ import type {
   CreateMythologyPayload,
   MythologyCategory,
   MythologyEntity,
+  MythologySortDirection,
   PatchMythologyPayload,
 } from '../../src/api/mythology';
 
@@ -20,8 +21,10 @@ const createEntitySuffix = (): string => {
 };
 
 export const mythologyCategories = ['gods', 'heroes', 'creatures'] as const satisfies readonly MythologyCategory[];
-export const mythologySortDirections = ['asc', 'desc'] as const;
+export const mythologySortDirections =
+  ['asc', 'desc'] as const satisfies readonly MythologySortDirection[];
 export const protectedSystemEntityIds = [1, 31] as const;
+export const notFoundMythologyEntityId = 999_999_999;
 
 export const createMythologyPayload = (
   overrides: Partial<CreateMythologyPayload> = {},
