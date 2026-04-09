@@ -250,7 +250,42 @@ Auth helper behavior:
 2. `createUniqueCredentialsFromEnv()` uses `USERNAME` as a prefix and appends a unique suffix for registration tests
 3. If `USERNAME` or `PASSWORD` is missing, auth helpers fail explicitly instead of silently falling back to defaults
 
-## Step 8. Install the Playwright VS Code Extension
+## Step 8. Configure GitHub Actions Secrets
+
+GitHub Actions does not read your local `.env` file automatically.
+
+This project uses the following strategy in CI:
+
+1. `BASE_URL` is set directly in the workflow
+2. Public smoke tests always run
+3. Auth tests run only when repository secrets are configured
+
+Add these repository secrets in GitHub:
+
+1. Open your repository in GitHub
+2. Go to `Settings`
+3. Open `Secrets and variables`
+4. Open `Actions`
+5. Click `New repository secret`
+6. Create `QASANDBOX_USERNAME`
+7. Create `QASANDBOX_PASSWORD`
+
+The workflow maps them like this:
+
+```yaml
+env:
+  BASE_URL: https://api.qasandbox.ru/api/
+  USERNAME: ${{ secrets.QASANDBOX_USERNAME }}
+  PASSWORD: ${{ secrets.QASANDBOX_PASSWORD }}
+```
+
+Behavior in CI:
+
+1. `npm run typecheck` runs on every workflow run
+2. `npm run test:smoke` runs on every workflow run
+3. `npm run test:auth` runs only if both secrets are present
+
+## Step 9. Install the Playwright VS Code Extension
 
 To run and debug tests directly from the editor, install the Playwright extension in VS Code.
 
@@ -267,7 +302,7 @@ Why install it:
 3. See locators and test results more easily
 4. Improve day-to-day productivity during test development
 
-## Step 9. Run Tests from the Console
+## Step 10. Run Tests from the Console
 
 Run all tests:
 
@@ -341,7 +376,7 @@ or:
 npm run pw:install
 ```
 
-## Step 10. Run Type Check
+## Step 11. Run Type Check
 
 Run TypeScript type-checking without generating output files:
 
@@ -357,7 +392,7 @@ npm run typecheck
 
 This is useful for catching typing mistakes early, even though Playwright can execute TypeScript tests directly.
 
-## Step 11. Recommended Project Structure
+## Step 12. Recommended Project Structure
 
 A simple structure that works well for an API-focused Playwright project:
 
@@ -382,7 +417,7 @@ What each part is for:
 5. `package.json` contains dependencies and runnable scripts.
 6. `.env.example` documents required environment variables.
 
-## Step 12. API Smoke Test Starter
+## Step 13. API Smoke Test Starter
 
 The project includes a smoke test at `tests/api/mythology.spec.ts`.
 
@@ -398,7 +433,7 @@ Why it works this way:
 2. It is a better real smoke test for this API than a placeholder endpoint
 3. `USERNAME` and `PASSWORD` stay in `.env` for the future `/register` and JWT flow
 
-## Step 13. Auth Test Starter
+## Step 14. Auth Test Starter
 
 The project also includes auth tests at `tests/api/auth.spec.ts`.
 
