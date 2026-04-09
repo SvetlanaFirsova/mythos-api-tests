@@ -667,6 +667,64 @@ Rate limit note:
 
 Before running it, update `.env` with the real API values for your project.
 
+## Step 20. Student Homework: Extend Test Coverage
+
+The current project already covers the main happy-path and baseline negative scenarios.
+
+Use the tasks below as homework to deepen the API test suite without changing the overall project structure.
+
+### Homework Part 1. Add Business Edge Cases
+
+Extend the suite with cases that are easy to miss in basic CRUD coverage:
+
+1. Verify `POST /mythology/{id}` returns `405 Method Not Allowed`
+2. Verify `PUT /mythology/{id}` returns the expected status for a non-existent entity
+3. Verify `PATCH /mythology/{id}` returns the expected status for a non-existent entity
+4. Verify `DELETE /mythology/{id}` returns the expected status for a non-existent entity
+5. Expand protected entity coverage beyond one sample ID and validate a wider range such as `1-31`
+
+### Homework Part 2. Improve Error Assertions
+
+The current tests already validate error shape. The next step is to validate error meaning more precisely where the API is stable.
+
+Add assertions for:
+
+1. Exact or partially matched `message` text for stable `400` responses
+2. Exact or partially matched `error` text for stable `401`, `403`, and `404` responses
+3. Consistent error-body structure across different failing endpoints
+
+Important:
+
+1. Only assert exact messages if the backend contract is stable enough
+2. If messages are unstable, prefer partial matches over brittle exact strings
+
+### Homework Part 3. Expand Data-Driven Negative Tests
+
+Convert more invalid scenarios into table-driven coverage.
+
+Good candidates:
+
+1. Empty string values
+2. Whitespace-only values
+3. Invalid `category` values
+4. Missing required fields
+5. Excessively long strings, if the API has practical limits
+6. Invalid `img` values, if the backend validates image URLs or formats
+
+Expected goal:
+
+1. New negative cases should be added by extending data tables, not by copy-pasting full tests
+
+### Homework Part 4. Improving Scenarios
+
+The read suite is a strong start, but it can still be improved.
+
+Add coverage for:
+
+1. Combined query parameters such as `category + sort`
+2. More explicit sort validation instead of only checking that order changes
+3. Additional checks that filtered responses still follow the expected contract
+
 ## Project Summary
 
 This setup gives you:
