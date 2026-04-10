@@ -30,6 +30,8 @@ export default defineConfig({
   use: {
     /* Base URL to use in actions like `await page.goto('')`. */
     baseURL: process.env.BASE_URL,
+    /* Ignore certificate */
+    ignoreHTTPSErrors: true,
 
     /* Keep failure traces on CI and capture them on the first retry locally. */
     trace: isCI ? 'retain-on-failure' : 'on-first-retry',
