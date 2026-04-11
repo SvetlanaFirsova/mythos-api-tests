@@ -14,6 +14,9 @@ import {
   createMythologyPayload,
   invalidCreateMythologyCases,
   protectedSystemEntityIds,
+  notFoundMythologyEntityId,        //For 404 tests
+  createReplacementMythologyPayload, //For test PUT 404
+  createPatchMythologyPayload, //For test PATCH 404
 } from '../support/mythology-test-data';
 import {
   expectApiErrorBodyContract,
@@ -291,3 +294,74 @@ for (const systemEntityId of protectedSystemEntityIds) {
     },
   );
 }
+
+test.describe('Homework Part 1: Business Edge Cases', () => {
+
+  test('POST /mythology/{id} should return 405', { tag: '@negative' }, async ({ request, authToken, debugApiCall }) => {
+    const response = await test.step('Attempt POST to a specific entity ID', async () =>
+      debugApiCall(
+        {
+          label: 'Attempt POST to a specific entity ID',
+          request: { method: 'POST', url: 'mythology/1' },
+        },
+        () => request.post('mythology/1', { 
+          headers: { Authorization: `Bearer ${authToken}` } 
+        })
+      )
+    );
+    expect(response.status()).toBe(405);
+  });
+
+  test('PUT /mythology/{id} with non-existent ID should return 404', { tag: '@negative' }, async ({ request, authToken, debugApiCall }) => {
+    const payload = createReplacementMythologyPayload();
+    const response = await test.step('Replace non-existent mythology entity', async () =>
+      debugApiCall(
+        {
+          label: 'Replace non-existent mythology entity',
+          request: { 
+            method: 'PUT', 
+            url: `mythology/${notFoundMythologyEntityId}`, 
+            body: payload 
+          },
+        },
+        () => replaceMythologyEntity(request, authToken, notFoundMythologyEntityId, payload)
+      )
+    );
+    expect(response.status()).toBe(404);
+    expectJsonContentType(response);
+    expectApiErrorBodyContract(await response.json());
+  });
+
+  test('PATCH /mythology/{id} with non-existent ID should return 404', { tag: '@negative' }, async ({ request, authToken, debugApiCall }) => {
+    const patchPayload = createPatchMythologyPayload();
+    const response = await test.step('Patch non-existent mythology entity', async () =>
+      debugApiCall(
+        {
+          label: 'Patch non-existent mythology entity',
+          request: { 
+            method: 'PATCH', 
+            url: `mythology/${notFoundMythologyEntityId}`, 
+            body: patchPayload 
+          },
+        },
+        () => patchMythologyEntity(request, authToken, notFoundMythologyEntityId, patchPayload)
+      )
+    );
+    expect(response.status()).toBe(404);
+  });
+
+  test('DELETE /mythology/{id} with non-existent ID should return 404', { tag: '@negative' }, async ({ request, authToken, debugApiCall }) => {
+    const response = await test.step('Delete non-existent mythology entity', async () =>
+      debugApiCall(
+        {
+          label: 'Delete non-existent mythology entity',
+          request: { method: 'DELETE', url: `mythology/${notFoundMythologyEntityId}` },
+        },
+        () => request.delete(`mythology/${notFoundMythologyEntityId}`, {
+          headers: { Authorization: `Bearer ${authToken}` }
+        })
+      )
+    );
+    expect(response.status()).toBe(404);
+  });
+});
