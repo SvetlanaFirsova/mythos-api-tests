@@ -70,4 +70,36 @@ export const invalidCreateMythologyCases: InvalidCreateMythologyCase[] = [
       name: '',
     }),
   },
+  //Whitespace-only values
+  {
+    name: 'whitespace-only name',
+    payload: createMythologyPayload({
+      name: '   ',
+      desc: 'Whitespace-only name should be invalid.',
+    }),
+  },
+  //Invalid category
+  {
+    name: 'invalid category',
+    payload: createMythologyPayload({
+      //@ts-ignore: Testing invalid value outside of the type
+      category: 'aliens', 
+      desc: 'Non-existent category should return 400.',
+    }),
+  },
+  //Excessively long strings (Example: > 1000 chars)
+  {
+    name: 'excessively long description',
+    payload: createMythologyPayload({
+      desc: 'a'.repeat(1001), 
+    }),
+  },
+  //Invalid img URL format
+  {
+    name: 'invalid image URL',
+    payload: createMythologyPayload({
+      img: 'not-a-url',
+    }),
+  },
 ];
+
