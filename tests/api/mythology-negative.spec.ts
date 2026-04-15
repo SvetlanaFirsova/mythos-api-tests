@@ -156,13 +156,13 @@ for (const testCase of invalidCreateMythologyCases) {
 
         expectApiErrorBodyContract(body);
 
-        // Validate that the error message contains the relevant field name
+        //Validate that the error message contains the relevant field name
         const fieldName = testCase.name.split(' ').pop(); 
         const errorMessage = body.error;
         
         expect(errorMessage.toLowerCase()).toContain(fieldName?.toLowerCase());
       } else {
-        // If status is 201, the test passes but logs a warning about the server behavior
+        //If status is 201, the test passes but logs a warning about the server behavior
         console.log(`[Soft Pass] Server allowed "${testCase.name}" with status 201 instead of 400.`);
       }
     },
